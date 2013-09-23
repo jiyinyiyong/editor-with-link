@@ -1,0 +1,22 @@
+{
+  "name": "editor-with-link",
+  "version": "0.0.1",
+  "description": "an simple editor that markups links",
+  "main": "index.js",
+  "dependencies": {
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-stylus": "~0.8.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jade": "~0.8.0",
+    "grunt-contrib-watch": "~0.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "link"
+  ],
+  "author": "jiyinyiyong",
+  "license": "BSD"
+}

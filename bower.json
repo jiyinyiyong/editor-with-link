@@ -1,0 +1,23 @@
+{
+  "name": "editor-with-link",
+  "version": "0.0.1",
+  "authors": [
+    "jiyinyiyong <jiyinyiyong@gmail.com>"
+  ],
+  "description": "a simple editor that markups linkes",
+  "main": "build/main.js",
+  "keywords": [
+    "links"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "zepto": "~1.0.0"
+  }
+}
