@@ -1,6 +1,6 @@
 
 window.onload = ->
-  editor = new EditorWithlink
+  editor = new EditorWithLink
 
   $('body').append editor.$el
 

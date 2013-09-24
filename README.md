@@ -4,7 +4,7 @@ Editor with links
 
 ### Dependencies
 
-* Zepto
+* jQuery
 
 ### Installation
 
@@ -13,6 +13,11 @@ bower install
 npm install
 ```
 
+### Browser Support
+
+* Chrome, works
+* Firefox, IE, fails to text head
+
 ### Demo
 
-See `build/index.html`.
+Run `grunt dev` and see `build/index.html`.

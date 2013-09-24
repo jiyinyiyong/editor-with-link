@@ -1,10 +1,10 @@
 
-class EditorWithlink
+class EditorWithLink
   constructor: ->
     @$el = $ @makeHtml()
-    @syncText()
     @setupListener()
     @showViewer()
+    @syncText()
 
   regex:
     link: /((http|https|ftp|ftps)\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?))/g
@@ -43,6 +43,7 @@ class EditorWithlink
       length = @recordLength()
       @$('.link-editor').show().focus()
       @simulateCaret length
+    @syncText()
 
   showViewer: ->
     @$('.link-editor').hide()
@@ -64,18 +65,21 @@ class EditorWithlink
     if window.getSelection?
       selection = window.getSelection()
       {anchorNode, anchorOffset} = selection
-      startNode = @$('.link-viewer').get(0).childNodes[0]
-      console.log anchorNode, anchorOffset
-      range = document.createRange()
-      range.setStart anchorNode, 0
-      range.setEnd anchorNode, anchorOffset
+      parentNode = @$('.link-viewer').get(0)
+      previousRange = selection.getRangeAt(0)
+      # console.log anchorNode, anchorOffset
+      range = previousRange.cloneRange()
+      range.setStartBefore parentNode if parentNode?
+      range.setEnd anchorNode, anchorOffset if anchorNode?
+      range.toString().length
+      selection.removeAllRanges()
       selection.addRange range
       selection.toString().length
     else
       0
 
   simulateCaret: (length) ->
-    console.log 'semulting, ', length
+    # console.log 'semulting, ', length
     @$('.link-editor').get(0).selectionStart = length
     @$('.link-editor').get(0).selectionEnd = length
 
