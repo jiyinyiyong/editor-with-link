@@ -3,6 +3,7 @@ class EditorWithLink
   constructor: (@options) ->
     @options ?= {}
     @options.empty ?= 'Write here...'
+    @mode = 'viewer'
 
     @$el = $ @makeHtml()
     @setupListener()
@@ -18,18 +19,13 @@ class EditorWithLink
 
   makeHtml: ->
     viewer = "<div class='link-viewer link-views'></div>"
-    hint = "<div class='link-views link-empty'>#{@options.empty}</div>"
-    editor = "<textarea class='link-editor link-views'></textarea>"
-    "<div class='editor-with-link'>#{hint}#{viewer}#{editor}</div>"
+    empty = "placeholder='#{@options.empty}'"
+    editor = "<textarea class='link-editor link-views' #{empty}></textarea>"
+    "<div class='editor-with-link'>#{viewer}#{editor}</div>"
 
   syncText: ->
     content = @$('.link-editor').val()
     @$('.link-viewer').html (@convert content)
-    console.log 'content is ', content
-    if content.trim().length > 0
-      @$('.link-empty').hide()
-    else
-      @$('.link-empty').show()
 
     height = @$('.link-viewer').css 'height'
     @$el.css 'height', height
@@ -50,14 +46,20 @@ class EditorWithLink
     on
 
   showEditor: (event) ->
+    @mode = 'editor'
     unless event? and $(event.target).is 'a'
       length = @recordLength()
       @$('.link-editor').show().focus()
       @simulateCaret length
-    @syncText()
 
   showViewer: ->
+    @mode = 'viewer'
     @$('.link-editor').hide()
+    content = @$('.link-editor').val()
+    if $.trim(content).length is 0
+      @showEditor() if @mode is 'viewer'
+    else
+      @showViewer() if @mode is 'editor'
 
   convert: (text) ->
     text
@@ -77,9 +79,8 @@ class EditorWithLink
       selection = window.getSelection()
       {anchorNode, anchorOffset} = selection
       parentNode = @$('.link-viewer').get(0)
-      previousRange = selection.getRangeAt(0)
       # console.log anchorNode, anchorOffset
-      range = previousRange.cloneRange()
+      range = document.createRange()
       range.setStartBefore parentNode if parentNode?
       range.setEnd anchorNode, anchorOffset if anchorNode?
       range.toString().length
@@ -90,9 +91,10 @@ class EditorWithLink
       0
 
   simulateCaret: (length) ->
-    # console.log 'semulting, ', length
-    @$('.link-editor').get(0).selectionStart = length
-    @$('.link-editor').get(0).selectionEnd = length
+    try
+      # console.log 'semulting, ', length
+      @$('.link-editor').get(0).selectionStart = length
+      @$('.link-editor').get(0).selectionEnd = length
 
   getText: ->
     @$('.link-editor').val()
