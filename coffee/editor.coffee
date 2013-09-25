@@ -1,6 +1,9 @@
 
 class EditorWithLink
-  constructor: ->
+  constructor: (@options) ->
+    @options ?= {}
+    @options.empty ?= 'Write here...'
+
     @$el = $ @makeHtml()
     @setupListener()
     @showViewer()
@@ -15,11 +18,19 @@ class EditorWithLink
 
   makeHtml: ->
     viewer = "<div class='link-viewer link-views'></div>"
+    hint = "<div class='link-views link-empty'>#{@options.empty}</div>"
     editor = "<textarea class='link-editor link-views'></textarea>"
-    "<div class='editor-with-link'>#{viewer}#{editor}</div>"
+    "<div class='editor-with-link'>#{hint}#{viewer}#{editor}</div>"
 
   syncText: ->
-    @$('.link-viewer').html (@convert @$('.link-editor').val())
+    content = @$('.link-editor').val()
+    @$('.link-viewer').html (@convert content)
+    console.log 'content is ', content
+    if content.trim().length > 0
+      @$('.link-empty').hide()
+    else
+      @$('.link-empty').show()
+
     height = @$('.link-viewer').css 'height'
     @$el.css 'height', height
     @$('.link-editor').css 'height', height

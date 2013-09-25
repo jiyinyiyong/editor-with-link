@@ -12,23 +12,32 @@
     box-sizing border-box
     -moz-box-sizing border-box
 
+  .link-empty
+    color gray
+    position absolute
+    top 0
+    z-index 1
+
   .link-views
+    position absolute
+    top 0
     width 100%
     min-height 30px
     padding 5px 4px
     word-break break-word
     font-size 14px
     font-family Helvetica, Arial, sans-serif
+    white-space pre-wrap
 
   .link-editor
-    position absolute
-    top 0px
     outline none
     border none
     resize none
+    z-index 3
 
   .link-viewer
     padding-bottom 40px
+    z-index 2
 
     a
       color blue
