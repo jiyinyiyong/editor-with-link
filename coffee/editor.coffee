@@ -49,8 +49,10 @@ class EditorWithLink
     @mode = 'editor'
     unless event? and $(event.target).is 'a'
       length = @recordLength()
-      @$('.link-editor').show().focus()
-      @simulateCaret length
+      @$('.link-editor').show()
+      if event?
+        @$('.link-editor').focus()
+        @simulateCaret length
 
   showViewer: ->
     @mode = 'viewer'
