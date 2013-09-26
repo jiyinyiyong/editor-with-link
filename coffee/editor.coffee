@@ -27,9 +27,6 @@ class EditorWithLink
     content = @$('.link-editor').val()
     @$('.link-viewer').html (@convert content)
 
-    height = @$('.link-viewer').css 'height'
-    @$('.link-editor').css 'height', height
-
   setupListener: ->
     @$el.on 'keyup', '.link-editor', =>
       setTimeout => @syncText()
@@ -39,6 +36,12 @@ class EditorWithLink
       @stopPropagation event
     @$el.on 'click', '.link-viewer', (event) =>
       @showEditor event
+      @stopPropagation event
+    @$el.on 'click', '.link-editor', (event) =>
+      @stopPropagation event
+    @$el.on 'click', (event) =>
+      @showEditor event unless @mode is 'editor'
+      @simulateCaretEnd()
 
   stopPropagation: (event) ->
     event.stopPropagation()
@@ -63,7 +66,7 @@ class EditorWithLink
       @showViewer() if @mode is 'editor'
 
   convert: (text) ->
-    text
+    text = text
     .replace /</g,
       '&lt;'
     .replace />/g,
@@ -74,6 +77,7 @@ class EditorWithLink
       '<a href="$1" target="_blank" title="Go to $3">$1</a>'
     .replace @regex.email,
       '<a href="mailto:$1" title="Send mail to $1">$1</a>'
+    text + '<br>'
 
   recordLength: ->
     if window.getSelection?
@@ -94,6 +98,12 @@ class EditorWithLink
   simulateCaret: (length) ->
     try
       # console.log 'semulting, ', length
+      @$('.link-editor').get(0).selectionStart = length
+      @$('.link-editor').get(0).selectionEnd = length
+
+  simulateCaretEnd: ->
+    try
+      length = @$('.link-editor').val().length
       @$('.link-editor').get(0).selectionStart = length
       @$('.link-editor').get(0).selectionEnd = length
 
