@@ -28,12 +28,11 @@ class EditorWithLink
     @$('.link-viewer').html (@convert content)
 
     height = @$('.link-viewer').css 'height'
-    @$el.css 'height', height
     @$('.link-editor').css 'height', height
 
   setupListener: ->
     @$el.on 'keyup', '.link-editor', =>
-      @syncText()
+      setTimeout => @syncText()
     @$el.on 'blur', '.link-editor', =>
       @showViewer()
     @$el.on 'click', '.link-viewer a', (event) =>
