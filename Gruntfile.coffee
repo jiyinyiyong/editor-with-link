@@ -5,7 +5,7 @@ module.exports = (grunt) ->
     coffee:
       options:
         bare: yes
-        sourceMap: yes
+        sourceMap: no
       main:
         cwd: 'coffee/'
         expand: yes

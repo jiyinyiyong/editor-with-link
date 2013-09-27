@@ -67,6 +67,8 @@ class EditorWithLink
 
   convert: (text) ->
     text = text
+    .replace /&((\w{2,8})|(#\d{2,8});)/g,
+      '&amp;$1'
     .replace /</g,
       '&lt;'
     .replace />/g,
