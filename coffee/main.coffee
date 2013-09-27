@@ -1,11 +1,11 @@
 
 window.onload = ->
-  editor = new EditorWithLink
 
-  $('body').append editor.$el
-
-  editor.setText """demo
+  text = """demo
   jiyinyiyong@qq.com
   http://qq.com
   """
-  console.log editor.getText()
+
+  editor = new EditorWithLink {text}
+
+  $('body').append editor.$el

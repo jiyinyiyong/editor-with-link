@@ -3,10 +3,10 @@ class EditorWithLink
   constructor: (@options) ->
     @options ?= {}
     @options.empty ?= 'Write here...'
-    @mode = 'viewer'
 
     @$el = $ @makeHtml()
     @setupListener()
+    @setText @options.text if @options.text
     @showViewer()
     @syncText()
 
@@ -34,13 +34,14 @@ class EditorWithLink
       @showViewer()
     @$el.on 'click', '.link-viewer a', (event) =>
       @stopPropagation event
-    @$el.on 'click', '.link-viewer', (event) =>
-      @showEditor event
-      @stopPropagation event
-    @$el.on 'click', '.link-editor', (event) =>
-      @stopPropagation event
     @$el.on 'click', (event) =>
-      @showEditor event unless @mode is 'editor'
+      @whenFocus event
+
+  whenFocus: (event) ->
+    if $(event.target).is '.link-viewer'
+      @showEditor event
+    else if $(event.target).is '.editor-with-link'
+      @showEditor event
       @simulateCaretEnd()
 
   stopPropagation: (event) ->
@@ -48,7 +49,6 @@ class EditorWithLink
     on
 
   showEditor: (event) ->
-    @mode = 'editor'
     unless event? and $(event.target).is 'a'
       length = @recordLength()
       @$('.link-editor').show()
@@ -57,13 +57,9 @@ class EditorWithLink
         @simulateCaret length
 
   showViewer: ->
-    @mode = 'viewer'
-    @$('.link-editor').hide()
     content = @$('.link-editor').val()
-    if $.trim(content).length is 0
-      @showEditor() if @mode is 'viewer'
-    else
-      @showViewer() if @mode is 'editor'
+    if $.trim(content).length > 0
+      @$('.link-editor').hide()
 
   convert: (text) ->
     text = text
@@ -73,12 +69,12 @@ class EditorWithLink
       '&lt;'
     .replace />/g,
       '&gt;'
-    .replace /\n/g,
-      '<br>'
     .replace @regex.link,
       '<a href="$1" target="_blank" title="Go to $3">$1</a>'
     .replace @regex.email,
       '<a href="mailto:$1" title="Send mail to $1">$1</a>'
+    .replace /\n/g,
+      '<br>'
     text + '<br>'
 
   recordLength: ->
